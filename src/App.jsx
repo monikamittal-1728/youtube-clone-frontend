@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "./components/Header/Header";
+import Sidebar from "./components/SideSlider/Sidebar";
 
 const App = () => {
   return (
@@ -10,6 +11,9 @@ const App = () => {
       className="w-screen h-screen"
     >
       <Header />
+      <div>
+        <Sidebar/>
+      </div>
     </div>
   );
 };
