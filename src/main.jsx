@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
 import Register from "./pages/Register.jsx";
 import SigninPage from "./pages/SigninPage.jsx";
+import VideoWatchPage from "./pages/VideoWatchPage.jsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "/watch",
+        element: <VideoWatchPage />,
       },
     ],
   },

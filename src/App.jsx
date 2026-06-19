@@ -2,6 +2,7 @@ import React from "react";
 import Header from "./components/Header/Header";
 import Sidebar from "./components/SideSlider/Sidebar";
 import { useState } from "react";
+import { Outlet } from "react-router-dom";
 
 const App = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -14,6 +15,7 @@ const App = () => {
     >
       <Header setSidebarOpen={setSidebarOpen} />
       <Sidebar setSidebarOpen={setSidebarOpen} sidebarOpen={sidebarOpen} />
+      <Outlet/>
     </div>
   );
 };
