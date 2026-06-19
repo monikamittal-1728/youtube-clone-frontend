@@ -5,8 +5,8 @@ import App from "./App.jsx";
 import { ThemeProvider } from "./components/Context/ThemeContext.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
 import Register from "./pages/Register.jsx";
+import SigninPage from "./pages/SigninPage.jsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -17,11 +17,11 @@ const appRouter = createBrowserRouter([
         path: "/",
         element: <HomePage />,
       },
-      {
-        path: "/login",
-        element: <LoginPage />,
-      },
     ],
+  },
+  {
+    path: "/signin",
+    element: <SigninPage />,
   },
   {
     path: "/register",
