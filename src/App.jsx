@@ -1,8 +1,10 @@
 import React from "react";
 import Header from "./components/Header/Header";
 import Sidebar from "./components/SideSlider/Sidebar";
+import { useState } from "react";
 
 const App = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   return (
     <div
       style={{
@@ -10,10 +12,8 @@ const App = () => {
       }}
       className="w-screen h-screen"
     >
-      <Header />
-      <div>
-        <Sidebar/>
-      </div>
+      <Header setSidebarOpen={setSidebarOpen} />
+      <Sidebar setSidebarOpen={setSidebarOpen} sidebarOpen={sidebarOpen} />
     </div>
   );
 };

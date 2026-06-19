@@ -8,7 +8,7 @@ import { IoArrowBack } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
 import SignInBtn from "./SignInBtn";
 
-const Header = () => {
+const Header = ({setSidebarOpen}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -79,7 +79,7 @@ const Header = () => {
 
       {/* Left — Hamburger + Logo */}
       <div className="flex items-center gap-3">
-        <button className="icon-btn p-2 rounded-full cursor-pointer">
+        <button onClick={()=>setSidebarOpen(prev => !prev)} className="icon-btn p-2 rounded-full cursor-pointer">
           <HiOutlineBars3 className="text-3xl text-primary" />
         </button>
         <div className="flex items-center gap-1 cursor-pointer">
