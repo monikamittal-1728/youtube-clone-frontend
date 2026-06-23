@@ -3,9 +3,11 @@ import Header from "./components/Header/Header";
 import Sidebar from "./components/SideSlider/Sidebar";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import useIsMobile from "./hooks/useIsMobile";
 
 const App = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const isMobile = useIsMobile();
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   return (
     <div
       style={{

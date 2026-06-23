@@ -16,8 +16,8 @@ const VideoCard = ({ video }) => {
       <div className="flex gap-3 mt-3">
         {/* Channel Avatar */}
         <img
-          src={video.channelAvatar}
-          alt={video.channelName}
+          src={video.channelId.channelAvatar}
+          alt={video.channelId.channelName}
           className="w-9 h-9 rounded-full object-cover flex-shrink-0"
         />
 
@@ -27,7 +27,7 @@ const VideoCard = ({ video }) => {
             {video.title}
           </h3>
 
-          <p className="text-sm text-secondary mt-1">{video.channelName}</p>
+          <p className="text-sm text-secondary mt-1">{video.channelId.channelName}</p>
 
           <p className="text-xs text-secondary">
             {video.views} views • {video.createdAt}

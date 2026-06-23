@@ -1,6 +1,7 @@
 import VideoCard from "../components/VideoCard";
 import useFetch from "../hooks/useFetch";
 import { useOutletContext } from "react-router-dom";
+import useIsMobile from "../hooks/useIsMobile";
 const categories = [
   "All",
   "React",
@@ -16,7 +17,7 @@ const categories = [
 
 const HomePage = () => {
   const { sidebarOpen } = useOutletContext();
-
+  const isMobile = useIsMobile();
   const { data, loading, error } = useFetch("http://localhost:5000/api/videos");
 
   if (loading) {
@@ -31,10 +32,11 @@ const HomePage = () => {
 
   return (
     <div
-      className={`pt-20 px-4 transition-all duration-300 ${
-        sidebarOpen ? "ml-60" : "ml-20"
+      className={`pt-20 px-4 transition-[margin] duration-300 ease-in-out ${
+        isMobile ? "ml-0" : sidebarOpen ? "ml-60" : "ml-20"
       }`}
     >
+      {" "}
       {/* Category Pills */}
       <div className="flex gap-3 overflow-x-auto scrollbar-hide mb-6 pb-2">
         {categories.map((category, index) => (
@@ -59,9 +61,8 @@ const HomePage = () => {
           </button>
         ))}
       </div>
-
       {/* Videos */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {videoList.map((item) => (
           <VideoCard key={item._id} video={item} />
         ))}

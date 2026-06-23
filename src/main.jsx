@@ -1,13 +1,18 @@
+import { lazy, Suspense } from "react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
+
 import App from "./App.jsx";
+
 import { ThemeProvider } from "./components/Context/ThemeContext.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import HomePage from "./pages/HomePage.jsx";
-import Register from "./pages/Register.jsx";
-import SigninPage from "./pages/SigninPage.jsx";
-import VideoWatchPage from "./pages/VideoWatchPage.jsx";
+import PageLoader from "./components/PageLoader.jsx";
+
+const HomePage = lazy(() => import("./pages/HomePage.jsx"));
+const Register = lazy(() => import("./pages/Register.jsx"));
+const SigninPage = lazy(() => import("./pages/SigninPage.jsx"));
+const VideoWatchPage = lazy(() => import("./pages/VideoWatchPage.jsx"));
 
 const appRouter = createBrowserRouter([
   {
@@ -16,22 +21,42 @@ const appRouter = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <HomePage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <HomePage />
+          </Suspense>
+        ),
       },
       {
         path: "/watch",
-        element: <VideoWatchPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <VideoWatchPage />
+          </Suspense>
+        ),
       },
     ],
   },
   {
     path: "/signin",
-    element: <SigninPage />,
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <SigninPage />
+      </Suspense>
+    ),
   },
   {
     path: "/register",
-    element: <Register />,
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <Register />
+      </Suspense>
+    ),
   },
+  {
+    path:"/loader",
+    element:<PageLoader/>
+  }
 ]);
 
 createRoot(document.getElementById("root")).render(
