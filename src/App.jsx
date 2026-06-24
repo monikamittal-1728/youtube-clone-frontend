@@ -1,19 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "./components/Header/Header";
 import Sidebar from "./components/SideSlider/Sidebar";
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import useIsMobile from "./hooks/useIsMobile";
 
 const App = () => {
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setSidebarOpen(true); // Home page → open sidebar
+    } else {
+      setSidebarOpen(false); // Other pages → closed sidebar
+    }
+  }, [location.pathname]);
+
   return (
     <div
       style={{
         backgroundColor: "var(--bg-primary)",
       }}
-      className="w-screen h-screen"
+      className="w-screen h-screen overflow-x-hidden"
     >
       <Header setSidebarOpen={setSidebarOpen} />
       <Sidebar setSidebarOpen={setSidebarOpen} sidebarOpen={sidebarOpen} />

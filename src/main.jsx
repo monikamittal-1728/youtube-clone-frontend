@@ -28,7 +28,7 @@ const appRouter = createBrowserRouter([
         ),
       },
       {
-        path: "/watch",
+        path: "/watch/:id",
         element: (
           <Suspense fallback={<PageLoader />}>
             <VideoWatchPage />
