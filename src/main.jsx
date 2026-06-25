@@ -12,6 +12,8 @@ import PageLoader from "./components/PageLoader.jsx";
 const HomePage = lazy(() => import("./pages/HomePage.jsx"));
 const VideoWatchPage = lazy(() => import("./pages/VideoWatchPage.jsx"));
 const AuthPage = lazy(() => import("./pages/AuthPage"));
+const CreateChannelPage = lazy(() => import("./pages/CreateChannelPage"));
+const ChannelPage = lazy(() => import("./pages/ChannelPage"));
 
 const appRouter = createBrowserRouter([
   {
@@ -34,11 +36,33 @@ const appRouter = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: "/channel/create",
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            {" "}
+            <CreateChannelPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/channel/:id",
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ChannelPage />
+          </Suspense>
+        ),
+      },
     ],
   },
-  { path: "/auth", element: <Suspense fallback={<PageLoader />}>
+  {
+    path: "/auth",
+    element: (
+      <Suspense fallback={<PageLoader />}>
         <AuthPage />
-      </Suspense> },
+      </Suspense>
+    ),
+  },
 ]);
 
 createRoot(document.getElementById("root")).render(

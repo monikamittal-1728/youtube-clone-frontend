@@ -40,6 +40,18 @@ const Header = ({ setSidebarOpen }) => {
     }
   };
 
+  const handleCreate = () => {
+  if (!user) {
+    navigate("/auth");
+    return;
+  }
+  if (user.channel) {
+    navigate(`/channel/${user.channel}`);
+  } else {
+    navigate("/channel/create");
+  }
+};
+
   const handleClear = () => setSearchQuery("");
 
   // ── Mobile Search View ────────────────────
@@ -162,7 +174,7 @@ const Header = ({ setSidebarOpen }) => {
           <>
             {/* Create button — desktop */}
             <button
-              onClick={() => navigate(`/channel/${user.channel}`)}
+              onClick={handleCreate}
               className="create-btn hidden md:flex text-primary border-theme rounded-full px-4 py-1.5 text-sm items-center gap-2 cursor-pointer"
             >
               <MdOutlineVideoCall className="text-lg" />
