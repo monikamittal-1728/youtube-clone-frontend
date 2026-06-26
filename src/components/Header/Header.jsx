@@ -39,18 +39,18 @@ const Header = ({ setSidebarOpen }) => {
       setMobileSearchOpen(false);
     }
   };
-
   const handleCreate = () => {
-  if (!user) {
-    navigate("/auth");
-    return;
-  }
-  if (user.channel) {
-    navigate(`/channel/${user.channel}`);
-  } else {
-    navigate("/channel/create");
-  }
-};
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+    if (user.channel) {
+      // ← pass openUpload: true in state
+      navigate(`/channel/${user.channel}`, { state: { openUpload: true } });
+    } else {
+      navigate("/channel/create");
+    }
+  };
 
   const handleClear = () => setSearchQuery("");
 
@@ -60,7 +60,10 @@ const Header = ({ setSidebarOpen }) => {
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center px-2 h-14 bg-primary gap-2">
         <button
           className="icon-btn p-2 rounded-full"
-          onClick={() => { setMobileSearchOpen(false); setSearchQuery(""); }}
+          onClick={() => {
+            setMobileSearchOpen(false);
+            setSearchQuery("");
+          }}
         >
           <IoArrowBack className="text-2xl text-primary" />
         </button>
@@ -106,7 +109,6 @@ const Header = ({ setSidebarOpen }) => {
   // ── Default Header View ───────────────────
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 h-14 bg-primary">
-
       {/* Left — Hamburger + Logo */}
       <div className="flex items-center gap-3">
         <button
@@ -125,7 +127,10 @@ const Header = ({ setSidebarOpen }) => {
       </div>
 
       {/* Center — Search */}
-      <form className="hidden md:flex items-center w-[40%]" onSubmit={handleSearch}>
+      <form
+        className="hidden md:flex items-center w-[40%]"
+        onSubmit={handleSearch}
+      >
         <div className="relative w-full">
           {isFocused && (
             <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-lg" />
@@ -161,7 +166,6 @@ const Header = ({ setSidebarOpen }) => {
 
       {/* Right */}
       <div className="flex items-center gap-2">
-
         {/* Mobile — Search icon */}
         <button
           className="icon-btn p-2 rounded-full md:hidden"
@@ -200,39 +204,39 @@ const Header = ({ setSidebarOpen }) => {
 
               {/* User dropdown menu */}
               {showUserMenu && (
-                <div className="absolute right-0 top-11 z-50 w-56 bg-[#212121] border border-[#3f3f3f] rounded-xl shadow-xl py-2">
-
-                  {/* User info */}
-                  <div className="px-4 py-3 border-b border-[#3f3f3f]">
-                    <p className="text-sm font-medium text-primary">
-                      {user.username}
+                <div className="absolute right-0 top-11 z-50 w-64 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-[#282828]">
+                  {/* User Info */}
+                  <div className="border-b border-gray-200 px-4 py-3 dark:border-gray-700">
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {user?.username?.charAt(0).toUpperCase() +
+                        user?.username?.slice(1)}
                     </p>
-                    <p className="text-xs text-secondary mt-0.5">
-                      {user.email}
+                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 truncate">
+                      {user?.email}
                     </p>
                   </div>
 
-                  {/* Your channel */}
-                  {user.channel && (
+                  {/* Channel */}
+                  {user?.channel && (
                     <button
                       onClick={() => {
                         navigate(`/channel/${user.channel}`);
                         setShowUserMenu(false);
                       }}
-                      className="flex items-center gap-3 px-4 py-2.5 w-full text-left text-sm text-primary hover:bg-hover transition-colors"
+                      className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-[#3f3f3f]"
                     >
                       <MdOutlineManageAccounts className="text-xl" />
-                      Your Channel
+                      <span>View your channel</span>
                     </button>
                   )}
 
                   {/* Logout */}
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-3 px-4 py-2.5 w-full text-left text-sm text-red-400 hover:bg-hover transition-colors"
+                    className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-[#3f3f3f]"
                   >
                     <RiLogoutBoxLine className="text-xl" />
-                    Sign out
+                    <span>Sign out</span>
                   </button>
                 </div>
               )}
@@ -260,7 +264,6 @@ const Header = ({ setSidebarOpen }) => {
             </button>
           </>
         )}
-
       </div>
     </header>
   );

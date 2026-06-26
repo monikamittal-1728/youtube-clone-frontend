@@ -44,8 +44,9 @@ const Sidebar = ({ setSidebarOpen, sidebarOpen }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
+  const isChannelPage = location.pathname.startsWith("/channel");
   const isMobile = useIsMobile();
-  const showOverlayMode = !isHomePage || isMobile;
+  const showOverlayMode = (!isHomePage && !isChannelPage) || isMobile;
 
   // ── Get user from localStorage ────────────
   const user = JSON.parse(localStorage.getItem("yt_user") || "null");
