@@ -54,14 +54,16 @@ const ChannelHeader = ({ channel, videosCount, isOwner, onUploadClick }) => {
 
             {/* Description — clickable */}
             {channel.description && (
-              <div className="flex items-baseline  text-sm  cursor-pointer "> 
-                <p
-                  className="text-secondary  mt-2 max-w-60 line-clamp-1 hover:text-primary transition-colors"
-                  onClick={() => setShowDescModal(true)}
-                >
+              <div
+                onClick={() => setShowDescModal(true)}
+                className="flex items-baseline  text-sm  cursor-pointer "
+              >
+                <p className="text-secondary  mt-2 max-w-60 line-clamp-1 hover:text-primary transition-colors">
                   {channel.description}
                 </p>
-                <span className="text-primary  font-semibold ml-1">...more</span>
+                <span className="text-primary  font-semibold ml-1">
+                  ...more
+                </span>
               </div>
             )}
 
@@ -73,7 +75,6 @@ const ChannelHeader = ({ channel, videosCount, isOwner, onUploadClick }) => {
                 <MdOutlineVideoCall className="text-xl" />
                 Upload video
               </button>
-              
             )}
           </div>
         </div>
@@ -82,7 +83,7 @@ const ChannelHeader = ({ channel, videosCount, isOwner, onUploadClick }) => {
           <button className=" px-3 pb-3 text-sm font-medium text-gray-500 dark:text-white">
             Home
           </button>
-         <button className="border-b-2 border-black dark:border-white px-3 pb-3 text-sm font-medium text-gray-900 dark:text-white">
+          <button className="border-b-2 border-black dark:border-white px-3 pb-3 text-sm font-medium text-gray-900 dark:text-white">
             Videos
           </button>
           <button className=" px-3 pb-3 text-sm font-medium text-gray-900 dark:text-white">

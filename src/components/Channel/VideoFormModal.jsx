@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
-import toast from "react-hot-toast";
+import usePost from "../../hooks/usePost";
+import usePut from "../../hooks/usePut";
+import { useToast } from "../ToastContainer";
 
 const CATEGORIES = [
   "All",
@@ -19,10 +21,19 @@ const CATEGORIES = [
   "Sports",
 ];
 
+const BASE_URL = "http://localhost:5000/api/videos";
+
 const VideoFormModal = ({ channelId, video, onClose, onSaved }) => {
   const isEdit = !!video;
   const token = localStorage.getItem("yt_token");
-  const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
+
+  // ── Hooks — usePut url includes video id when editing ─────────
+  const { postData, loading: postLoading } = usePost(BASE_URL);
+  const { putData, loading: putLoading } = usePut(`${BASE_URL}/${video?._id}`);
+
+  const loading = isEdit ? putLoading : postLoading;
+
   const [form, setForm] = useState({
     title: video?.title || "",
     description: video?.description || "",
@@ -37,37 +48,29 @@ const VideoFormModal = ({ channelId, video, onClose, onSaved }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.title.trim() || !form.videoUrl.trim()) {
-      toast.error("Title and Video URL are required");
+      showToast("Title and Video URL are required", "error");
       return;
     }
-    setLoading(true);
-    try {
-      const url = isEdit
-        ? `http://localhost:5000/api/videos/${video._id}`
-        : "http://localhost:5000/api/videos";
-      const method = isEdit ? "PUT" : "POST";
-      const body = isEdit ? form : { ...form, channelId };
 
-      const res = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(body),
-      });
-      const data = await res.json();
-      if (data.success) {
-        toast.success(isEdit ? "Video updated!" : "Video uploaded!");
+    try {
+      const data = isEdit
+        ? await putData(form, token)
+        : await postData({ ...form, channelId }, token);
+
+      if (data?.success) {
+        showToast(
+          isEdit
+            ? "Video updated successfully!"
+            : "Video uploaded successfully!",
+          "success",
+        );
         onSaved(data.video, isEdit);
         onClose();
       } else {
-        toast.error(data.message || "Failed");
+        showToast(data?.message || "Something went wrong", "error");
       }
-    } catch {
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      showToast(err.message || "Something went wrong", "error");
     }
   };
 
@@ -79,7 +82,6 @@ const VideoFormModal = ({ channelId, video, onClose, onSaved }) => {
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             {isEdit ? "Edit Video" : "Upload Video"}
           </h2>
-
           <button
             onClick={onClose}
             className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#3f3f3f] hover:text-gray-900 dark:hover:text-white transition-colors"
@@ -88,13 +90,12 @@ const VideoFormModal = ({ channelId, video, onClose, onSaved }) => {
           </button>
         </div>
 
-        {/* Body */}
+        {/* Form */}
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">
               Title *
             </label>
-
             <input
               name="title"
               type="text"
@@ -108,9 +109,8 @@ const VideoFormModal = ({ channelId, video, onClose, onSaved }) => {
 
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">
-              Video URL *
+              YouTube Video URL <span className="text-red-500">*</span>
             </label>
-
             <input
               name="videoUrl"
               type="url"
@@ -126,7 +126,6 @@ const VideoFormModal = ({ channelId, video, onClose, onSaved }) => {
             <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">
               Thumbnail URL
             </label>
-
             <input
               name="thumbnailUrl"
               type="url"
@@ -141,7 +140,6 @@ const VideoFormModal = ({ channelId, video, onClose, onSaved }) => {
             <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">
               Category
             </label>
-
             <select
               name="category"
               value={form.category}
@@ -160,7 +158,6 @@ const VideoFormModal = ({ channelId, video, onClose, onSaved }) => {
             <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">
               Description
             </label>
-
             <textarea
               name="description"
               placeholder="Tell viewers about your video"
@@ -180,7 +177,6 @@ const VideoFormModal = ({ channelId, video, onClose, onSaved }) => {
             >
               Cancel
             </button>
-
             <button
               type="submit"
               disabled={loading}

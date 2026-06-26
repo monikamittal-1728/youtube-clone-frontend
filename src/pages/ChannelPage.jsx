@@ -80,7 +80,9 @@ const ChannelPage = () => {
       setVideos((prev) =>
         prev.filter((video) => video._id !== selectedVideoId),
       );
-       showToast("Video deleted successfully");
+      showToast("Video deleted successfully!", "success");
+    } else {
+      showToast(data.message || "Failed to delete video", "error");
     }
 
     setShowDeleteDialog(false);
