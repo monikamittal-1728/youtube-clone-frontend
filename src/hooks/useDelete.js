@@ -1,44 +1,28 @@
 import { useState } from "react";
-import toast from "react-hot-toast";
 
-const useDelete = (token) => {
+const useDelete = () => {
   const [loading, setLoading] = useState(false);
+  const [error,   setError]   = useState(null);
 
-  const deleteVideo = async (url) => {
+  const deleteData = async (url, token = null) => {
     setLoading(true);
-
+    setError(null);
     try {
-      const res = await fetch(
-        url,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch(url, { method: "DELETE", headers });
       const data = await res.json();
-
-      if (!data.success) {
-        throw new Error(data.message || "Failed to delete");
-      }
-
-      toast.success("Video deleted!");
-
-      return true;
+      if (!data.success) throw new Error(data.message || "Failed to delete");
+      return data;
     } catch (err) {
-      toast.error(err.message);
-      return false;
+      const message = err.message || "Something went wrong";
+      setError(message);
+      throw new Error(message);
     } finally {
       setLoading(false);
     }
   };
 
-  return {
-    deleteVideo,
-    loading,
-  };
+  return { deleteData, loading, error };
 };
 
 export default useDelete;

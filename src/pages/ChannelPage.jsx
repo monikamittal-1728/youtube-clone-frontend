@@ -37,7 +37,7 @@ const ChannelPage = () => {
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
-  const { deleteVideo, loading: deleting } = useDelete(token);
+  const { deleteData, loading: deleting } = useDelete(token);
   const channel = data?.channel;
 
   // ── Check if current user is owner ───────
@@ -71,23 +71,21 @@ const ChannelPage = () => {
     setShowDeleteDialog(true);
   };
 
-  const handleConfirmDelete = async () => {
-    const success = await deleteVideo(
+const handleConfirmDelete = async () => {
+  try {
+    await deleteData(
       `http://localhost:5000/api/videos/${selectedVideoId}`,
+      token
     );
-
-    if (success) {
-      setVideos((prev) =>
-        prev.filter((video) => video._id !== selectedVideoId),
-      );
-      showToast("Video deleted successfully!", "success");
-    } else {
-      showToast(data.message || "Failed to delete video", "error");
-    }
-
+    setVideos((prev) => prev.filter((v) => v._id !== selectedVideoId));
+    showToast("Video deleted successfully!", "success");
+  } catch (err) {
+    showToast(err.message || "Failed to delete video", "error");
+  } finally {
     setShowDeleteDialog(false);
     setSelectedVideoId(null);
-  };
+  }
+};
 
   const handleCancelDelete = () => {
     setShowDeleteDialog(false);
