@@ -47,7 +47,7 @@ const ChannelDescriptionModal = ({ channel, onClose }) => {
         </div>
 
         {/* ── Body ── */}
-        <div className="px-6 py-4 flex flex-col gap-5 max-h-[70vh] overflow-y-auto scrollbar-hide">
+        <div className="px-6 py-4 flex flex-col gap-5 max-h-[70vh] overflow-y-auto ">
 
           {/* Description */}
           {channel.description ? (

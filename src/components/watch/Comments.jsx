@@ -107,8 +107,18 @@ const Comments = ({ videoId }) => {
             placeholder="Add a comment..."
             value={text}
             onChange={(e) => setText(e.target.value)}
-            onFocus={() => setIsFocused(true)}
-            className="w-full bg-transparent border-b border-[#3f3f3f] focus:border-primary outline-none text-sm text-primary pb-1 transition-colors"
+            onFocus={(e) => {
+              if (!token) {
+                e.target.blur(); // ← prevent focus
+                showToast("Please sign in to comment", "error");
+                return;
+              }
+              setIsFocused(true);
+            }}
+            readOnly={!token} // ← prevent typing if not logged in
+            className={`w-ful l bg-transparent border-b border-[#3f3f3f] focus:border-primary outline-none text-sm text-primary pb-1 transition-colors ${
+              !token ? "cursor-not-allowed opacity-60" : ""
+            }`}
           />
           {isFocused && (
             <div className="flex justify-end gap-2 mt-2">

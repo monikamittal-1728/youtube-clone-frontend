@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SiYoutube } from "react-icons/si";
 import { FaCamera } from "react-icons/fa";
-import toast from "react-hot-toast";
 import usePost from "../hooks/usePost";
+import { useToast } from "../components/ToastContainer";
 
 const CreateChannelPage = () => {
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ const CreateChannelPage = () => {
   });
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [errors, setErrors] = useState({});
+  const { showToast } = useToast();
 
   const token = localStorage.getItem("yt_token");
   const { postData, loading } = usePost("http://localhost:5000/api/channel");
@@ -59,11 +60,11 @@ const CreateChannelPage = () => {
           user.channel = res.channel._id;
           localStorage.setItem("yt_user", JSON.stringify(user));
         }
-        toast.success("Channel created successfully!");
+        showToast("Channel created successfully!","success");
         navigate(`/channel/${res.channel._id}`);
       }
     } catch (err) {
-      toast.error(err.message || "Failed to create channel");
+      showToast(err.message || "Failed to create channel", "error");
     }
   };
 

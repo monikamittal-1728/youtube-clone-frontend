@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import PageLoader from "../PageLoader";
 import useFetch from "../../hooks/useFetch";
@@ -19,17 +19,19 @@ const timeAgo = (dateStr) => {
   return `${Math.floor(months / 12)} years ago`;
 };
 
-const RelatedVideos = ({ currentVideoId }) => {
+const RelatedVideos = memo(({ currentVideoId }) => {
   const navigate = useNavigate();
-  const { data, loading } = useFetch(`http://localhost:5000/api/videos`);
+  const { data, loading } = useFetch("http://localhost:5000/api/videos");
+
+  // ── useMemo so shuffle runs only once per data load ────────
+  const videos = useMemo(() => {
+    return (data?.data || [])
+      .filter((v) => v._id !== currentVideoId)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 12);
+  }, [data, currentVideoId]);
 
   if (loading) return <PageLoader />;
-
-  // ✅ filter directly — no useState needed
-  const videos = (data?.data || [])
-    .filter((v) => v._id !== currentVideoId)
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 12);
 
   return (
     <div className="flex flex-col gap-3">
@@ -42,15 +44,10 @@ const RelatedVideos = ({ currentVideoId }) => {
           {/* Thumbnail */}
           <div className="relative w-40 flex-shrink-0 rounded-lg overflow-hidden">
             <img
-              src={
-                video.thumbnailUrl ||
-                `https://picsum.photos/seed/${video._id}/160/90`
-              }
+              src={video.thumbnailUrl || `https://picsum.photos/seed/${video._id}/160/90`}
               alt={video.title}
               className="w-full aspect-video object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
-              onError={(e) => {
-                e.target.src = `https://picsum.photos/seed/${video._id}/160/90`;
-              }}
+              onError={(e) => { e.target.src = `https://picsum.photos/seed/${video._id}/160/90`; }}
             />
             <span className="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1 rounded">
               {Math.floor(Math.random() * 20) + 3}:
@@ -74,6 +71,6 @@ const RelatedVideos = ({ currentVideoId }) => {
       ))}
     </div>
   );
-};
+});
 
 export default RelatedVideos;

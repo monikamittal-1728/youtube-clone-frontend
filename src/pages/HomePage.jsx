@@ -51,6 +51,7 @@ const HomePage = () => {
     const qs = params.toString();
     return qs ? `${BASE}?${qs}` : BASE;
   })();
+  console.log(apiUrl);
 
   const { data, loading, error } = useFetch(apiUrl);
   const videoList = data?.data || [];

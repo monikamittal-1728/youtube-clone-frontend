@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { SiYoutube } from "react-icons/si";
 import { FaCamera } from "react-icons/fa";
-import toast from "react-hot-toast";
 import usePost from "../hooks/usePost";
+import { useToast } from "../components/ToastContainer";
 
 const AuthPage = () => {
   const [mode, setMode] = useState("login");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [registerData, setRegisterData] = useState({
@@ -78,11 +79,11 @@ const AuthPage = () => {
       if (res.success) {
         localStorage.setItem("yt_token", res.token);
         localStorage.setItem("yt_user", JSON.stringify(res.user));
-        toast.success("Welcome back!");
+       showToast("Welcome Back!", "success");
         navigate("/");
       }
     } catch (err) {
-      toast.error(err.message);
+    showToast(err.message || "Failed to access account", "error");
     }
   };
 
@@ -100,14 +101,14 @@ const AuthPage = () => {
         avatar: registerData.avatar
       });
       if (res.success) {
-        toast.success("Account created! Please sign in.");
+       showToast("Account created! Please sign in.","success");
         setMode("login");
         setLoginData({ email: registerData.email, password: "" });
         setRegisterData({ username: "", email: "", password: "", avatar: null });
         setAvatarPreview(null);
       }
     } catch (err) {
-      toast.error(err.message);
+    showToast(err.message || "Failed to delete video", "error");
     }
   };
 

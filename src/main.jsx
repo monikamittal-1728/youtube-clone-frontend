@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+
 import "./index.css";
 
 import App from "./App.jsx";
@@ -8,6 +8,7 @@ import App from "./App.jsx";
 import { ThemeProvider } from "./components/Context/ThemeContext.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import PageLoader from "./components/PageLoader.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 const HomePage = lazy(() => import("./pages/HomePage.jsx"));
 const VideoWatchPage = lazy(() => import("./pages/VideoWatchPage.jsx"));
@@ -54,6 +55,7 @@ const appRouter = createBrowserRouter([
         ),
       },
     ],
+    errorElement: <NotFound />,
   },
   {
     path: "/auth",
@@ -62,6 +64,7 @@ const appRouter = createBrowserRouter([
         <AuthPage />
       </Suspense>
     ),
+    errorElement: <NotFound />,
   },
 ]);
 
