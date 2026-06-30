@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { SiYoutube } from "react-icons/si";
 import { HiOutlineBars3 } from "react-icons/hi2";
 import { FiSearch } from "react-icons/fi";
@@ -6,7 +7,6 @@ import { FaPlus } from "react-icons/fa6";
 import { IoCloseOutline, IoArrowBack } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
 import { MdOutlineVideoCall } from "react-icons/md";
-import { useNavigate, Link } from "react-router-dom";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { MdOutlineManageAccounts } from "react-icons/md";
 
@@ -16,12 +16,19 @@ const Header = ({ setSidebarOpen }) => {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
+  const location = useLocation();
+
   const navigate = useNavigate();
 
   // ── Get user from localStorage ────────────
   const user = JSON.parse(localStorage.getItem("yt_user") || "null");
   const isLoggedIn = !!user;
 
+  
+  const isOnChannelPage =
+    user?.channel && location.pathname === `/channel/${user.channel}`;
+
+    
   // ── Logout ────────────────────────────────
   const handleLogout = () => {
     localStorage.removeItem("yt_token");
@@ -177,14 +184,16 @@ const Header = ({ setSidebarOpen }) => {
         {isLoggedIn ? (
           <>
             {/* Create button — desktop */}
-            <button
-              onClick={handleCreate}
-              className="create-btn hidden md:flex text-primary border-theme rounded-full px-4 py-1.5 text-sm items-center gap-2 cursor-pointer"
-            >
-              <MdOutlineVideoCall className="text-lg" />
-              Create
-            </button>
-
+            {!isOnChannelPage && (
+              <button
+                onClick={handleCreate}
+                className="create-btn hidden md:flex text-primary border-theme rounded-full px-4 py-1.5 text-sm items-center gap-2 cursor-pointer"
+              >
+                <MdOutlineVideoCall className="text-lg" />
+                Create
+              </button>
+            )}
+            
             {/* User Avatar — desktop + mobile */}
             <div className="relative">
               <button
