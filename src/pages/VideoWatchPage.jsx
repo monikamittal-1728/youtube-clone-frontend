@@ -13,8 +13,8 @@ import useFetch from "../hooks/useFetch";
 import usePost from "../hooks/usePost";
 import { useToast } from "../components/ToastContainer";
 import PageLoader from "../components/PageLoader";
-import Comments from "../components/Watch/Comments";
-import RelatedVideos from "../components/Watch/RelatedVideos";
+import Comments from "../components/WatchVideo/Comments";
+import RelatedVideos from "../components/WatchVideo/RelatedVideos";
 
 const BASE = "http://localhost:5000/api/videos";
 
