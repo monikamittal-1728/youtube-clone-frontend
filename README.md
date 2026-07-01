@@ -6,7 +6,7 @@ A modern, responsive YouTube Clone frontend built with **React.js**, **React Rou
 
 ## 🎥 Demo
 
-[![Watch the demo](./public/thumbnail.png)](https://youtu.be/KTzZs53c728)
+[![Watch the demo](public/thumnail.png)](https://youtu.be/KTzZs53c728)
 
 Click the thumbnail above to watch the full demo video on YouTube.
 
